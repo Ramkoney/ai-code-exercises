@@ -27,8 +27,8 @@ Requirements
 
 Clone the project repository and navigate to the project directory:
 <bash>
-git clone <repository-url>
-cd <project-directory>
+git clone <https://github.com/Ramkoney/ai-code-exercises/>
+cd <rmasola51@aiwethinkcode>
 
 No additional packages are required  project only uses Python's standard library.
 Operations may include creating a task, viewing tasks, updating a task, and marking a task as completed.
@@ -45,7 +45,6 @@ manager = TaskManager("tasks.json")
 The default storage file is:
 text
 tasks.json
-
 
  Project Structure
 text
@@ -135,9 +134,9 @@ Use the application's task creation command and provide the task information, su
 
 For example:
 
-```text
+text
 Create a task called "Finish project report"
-```
+
 
 ### Step 4: Check the task
 
@@ -162,25 +161,19 @@ Check that Python is installed and that you are running the command from the cor
 
 Use the required date format:
 
-```text
+text
 YYYY-MM-DD
-```
 
 For example:
-
-```text
+text
 2026-08-20
-```
-
- The task does not appear
-
+The task does not appear
 Check that the task was saved successfully and that the application has access to its storage file.
 
  Summary
 
 Creating a task involves starting the Task Manager, entering the task information, 
 and checking that the task was successfully saved.
-
 
 Task Manager FAQ
 
@@ -204,12 +197,10 @@ The Task Manager is an application for organising and managing tasks.
 
 Run the application's main command from the project directory. For example:
 
-```bash
+bash
 python cli.py
-```
 
 Check the project's README for the exact command used by your version.
-
  Where are my tasks stored?
 
 Tasks are stored using the application's storage system. In the Python version, tasks are stored in a JSON file such as `tasks.json`.
@@ -232,9 +223,8 @@ The task's status can be changed to `DONE`. The application also records the com
 
 Yes. A task can have a due date. When entering a date, use the format required by the application, such as:
 
-```text
+text
 YYYY-MM-DD
-```
 
 Can I add tags to a task?
 
@@ -250,15 +240,11 @@ Make sure Python is installed and that you are running the application from the 
 
 Check that the date follows the required format:
 
-```text
+text
 YYYY-MM-DD
-```
-
 For example:
-
-```text
+text
 2026-08-20
-```
 
  Why didn't my task save?
 

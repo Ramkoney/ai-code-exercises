@@ -1,79 +1,79 @@
-Part1: Understanding a Specific Feature 
-        Main Components
-        task_manager.py - help us to create and store tasks 
-        models.py- define the task data model used by the Task Manager(iks an object).
-        storage.py- is a file that help to store and retrieve tasks
+  Part1: Understanding a Specific Feature 
+          Main Components
+          task_manager.py - help us to create and store tasks 
+          models.py- define the task data model used by the Task Manager(iks an object).
+          storage.py- is a file that help to store and retrieve tasks
 
-        Execution flolw When task is created and Updated 
-        -TaskManager Instance exists(its init already created TaskStorage and that storage already loaded existing tasks from disk)
-        -Call createTask: invalid date format => create  task print error and return None(no task created)
-        - Invalid prioritya_value=> task priority will raise value error
-        -Tag: if tags is None.Task Construjctor uses an empty list
-        -TaskStorage.load(callled when TaskStorage was created)reconstructs TaskObjects form tasks.json using TaskDecoder:newly created tasks will be present after save.
-        -Persistence is file based JSOn: there is no database or concurency control-simutaneous runs can  overwrite tasks-json.
+          Execution flolw When task is created and Updated 
+          -TaskManager Instance exists(its init already created TaskStorage and that storage already loaded existing tasks from disk)
+          -Call createTask: invalid date format => create  task print error and return None(no task created)
+          - Invalid prioritya_value=> task priority will raise value error
+          -Tag: if tags is None.Task Construjctor uses an empty list
+          -TaskStorage.load(callled when TaskStorage was created)reconstructs TaskObjects form tasks.json using TaskDecoder:newly created tasks will be present after save.
+          -Persistence is file based JSOn: there is no database or concurency control-simutaneous runs can  overwrite tasks-json.
 
-        How Data is stored and retrieved
+          How Data is stored and retrieved
 
-        -Tasks are persisted to JSON file (default"tasks.json)ön disk
-        -In memory they are kept in a dictionary self.tasks keyed by task.id
+          -Tasks are persisted to JSON file (default"tasks.json)ön disk
+          -In memory they are kept in a dictionary self.tasks keyed by task.id
 
-        -Custom JSON encoder/decoder(TaskEncoder/TaskDecoder)convert task objects,enums,datetimes to/from -JSON when saving/loading
+          -Custom JSON encoder/decoder(TaskEncoder/TaskDecoder)convert task objects,enums,datetimes to/from -JSON when saving/loading
 
-        Pattern Discovered
-        -Clear Separate files for different functions  which makes it easy to test and swap storage backend.
-        -Each Module has a focused role: models for behavior and data. storage for persistence. task manager for business logic.Cli for UI. 
-        -The code follows a layered architecture: 
-            CLI->TaskManager->Storage->JSON file
-Part 2: Deepen Understatnding Trhough Guided Questions 
-  -My initial Understatnding about the task priorities is that first task created has high priority which will be the first to be stored and retrived (using QUEUE data structure following FIFO method)
-  -I have discovered that 
-  Priorities are ENUM represented in numbers: LOW =1, MEDIUM=2, HIGH=3, URGENT=4 and Medium is default.
+          Pattern Discovered
+          -Clear Separate files for different functions  which makes it easy to test and swap storage backend.
+          -Each Module has a focused role: models for behavior and data. storage for persistence. task manager for business logic.Cli for UI. 
+          -The code follows a layered architecture: 
+              CLI->TaskManager->Storage->JSON file
+  Part 2: Deepen Understatnding Trhough Guided Questions 
+        -My initial Understatnding about the task priorities is that first task created has high priority which will be the first to be stored and retrived (using QUEUE data structure following FIFO method)
+        -I have discovered that 
+        Priorities are ENUM represented in numbers: LOW =1, MEDIUM=2, HIGH=3, URGENT=4 and Medium is default.
 
- -The system represents priority as a TaskPriority enum in memory.
-  -CLI and TaskManager accept priorities as integers
-  it represent the urgency/priority of a task, with a larger number
-  -they are used for  display,filtering and stastics
-Key insight
-  -Tasks are persisted in JSON files
-  -Enum priorities are saved in numbers
-  -TaskPriority mapped to integers
-  -Different files are Linked through API
-Misconceptions
-  -misconception - I thought the JSON file might contain python enum objects
-  -Clarified-Enums are stored as Integers 
+      -The system represents priority as a TaskPriority enum in memory.
+        -CLI and TaskManager accept priorities as integers
+        it represent the urgency/priority of a task, with a larger number
+        -they are used for  display,filtering and stastics
+      Key insight
+        -Tasks are persisted in JSON files
+        -Enum priorities are saved in numbers
+        -TaskPriority mapped to integers
+        -Different files are Linked through API
+      Misconceptions
+        -misconception - I thought the JSON file might contain python enum objects
+        -Clarified-Enums are stored as Integers 
 
-  -misconception - I assued priority implies any list or execution is ordered by priority.
-  Clarified-the code store by priority metadata  but doesnot sort or schedule tasks by priority.
+        -misconception - I assued priority implies any list or execution is ordered by priority.
+        Clarified-the code store by priority metadata  but doesnot sort or schedule tasks by priority.
 
-  -misconception - taskID are not simple integers.
-  Clarity- task.id is a UUID string generated by Task.init
+        -misconception - taskID are not simple integers.
+        Clarity- task.id is a UUID string generated by Task.init
 
-  Part 3:Mapping workflow
-python cli.py status <task_id> done
-cli.py calls:
-task_manager.update_task_status(args.task_id, args.status)
-The CLI then reports whether the update succeeded.
-The main components involved are:
-cli.py — receives the user's command.
-TaskManager.update_task_status() — controls the status update.
-TaskStorage.get_task() — finds the task using its ID.
-Task.mark_as_done() — changes the task's completion state.
-TaskStorage.save() — persists the changed task to tasks.json.
-TaskEncoder — converts the task into JSON.
-2. State changes
-The important code is in task_manager.py:
-update_task_status() ->        
-new_status == TaskStatus.DONE->storage.get_task(task_id)->task.mark_as_done() ->storage.save()
+    Part 3:Mapping workflow
+        python cli.py status <task_id> done
+        cli.py calls:
+        task_manager.update_task_status(args.task_id, args.status)
+        The CLI then reports whether the update succeeded.
+        The main components involved are:
+        cli.py — receives the user's command.
+        TaskManager.update_task_status() — controls the status update.
+        TaskStorage.get_task() — finds the task using its ID.
+        Task.mark_as_done() — changes the task's completion state.
+        TaskStorage.save() — persists the changed task to tasks.json.
+        TaskEncoder — converts the task into JSON.
+        2. State changes
+        The important code is in task_manager.py:
+        update_task_status() ->        
+        new_status == TaskStatus.DONE->storage.get_task(task_id)->task.mark_as_done() ->storage.save()
 
-When mark_as_done() is called in models.py, the task changes to TaskStatus.DONE and its completion/update timestamps are set.
+        When mark_as_done() is called in models.py, the task changes to TaskStatus.DONE and its completion/update timestamps are set.
 
-The application uses a JSON file called tasks.json as its persistent storage. 
-TaskStorage loads this file when it starts and writes the tasks back to it when save() is called.
+        The application uses a JSON file called tasks.json as its persistent storage. 
+        TaskStorage loads this file when it starts and writes the tasks back to it when save() is called.
 
-4. Potential points of failure
+        4. Potential points of failure
 
- several possible failure points:
+        several possible failure points:
 
-Invalid status: TaskStatus(new_status_value) could fail if an invalid status is supplied.
-Task doesn't exist: get_task(task_id) can return None, so the task cannot be completed.
-Saving fails: TaskStorage.save() catches exceptions and prints an error if writing tasks.json fails.
+        Invalid status: TaskStatus(new_status_value) could fail if an invalid status is supplied.
+        Task doesn't exist: get_task(task_id) can return None, so the task cannot be completed.
+        Saving fails: TaskStorage.save() catches exceptions and prints an error if writing tasks.json fails.
