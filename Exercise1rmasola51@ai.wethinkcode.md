@@ -1,51 +1,52 @@
   Part1: Understanding a Specific Feature 
-          Main Components
+          
+      -Main Components
           task_manager.py - help us to create and store tasks 
-          models.py- define the task data model used by the Task Manager(iks an object).
+           models.py- define the task data model used by the Task Manager(object).
           storage.py- is a file that help to store and retrieve tasks
 
-          Execution flolw When task is created and Updated 
-          -TaskManager Instance exists(its init already created TaskStorage and that storage already loaded existing tasks from disk)
-          -Call createTask: invalid date format => create  task print error and return None(no task created)
-          - Invalid prioritya_value=> task priority will raise value error
-          -Tag: if tags is None.Task Construjctor uses an empty list
-          -TaskStorage.load(callled when TaskStorage was created)reconstructs TaskObjects form tasks.json using TaskDecoder:newly created tasks will be present after save.
-          -Persistence is file based JSOn: there is no database or concurency control-simutaneous runs can  overwrite tasks-json.
+        Execution flow When task is created and Updated 
+          TaskManager Instance exists(its init already created TaskStorage and that storage already loaded existing tasks from disk)
+          Call createTask: invalid date format => create  task print error and return None(no task created)
+          Invalid prioritya_value=> task priority will raise value error
+          Tag: if tags is None.Task Construjctor uses an empty list
+          TaskStorage.load(callled when TaskStorage was created)reconstructs TaskObjects form tasks.json using TaskDecoder:newly created tasks will be present after save.
+          Persistence is file based JSOn: there is no database or concurency control-simutaneous runs can  overwrite tasks-json.
 
           How Data is stored and retrieved
 
-          -Tasks are persisted to JSON file (default"tasks.json)ön disk
-          -In memory they are kept in a dictionary self.tasks keyed by task.id
+          Tasks are persisted to JSON file (default"tasks.json)ön disk
+          In memory they are kept in a dictionary self.tasks keyed by task.id
 
-          -Custom JSON encoder/decoder(TaskEncoder/TaskDecoder)convert task objects,enums,datetimes to/from -JSON when saving/loading
+          Custom JSON encoder/decoder(TaskEncoder/TaskDecoder)convert task objects,enums,datetimes to/from -JSON when saving/loading
 
           Pattern Discovered
-          -Clear Separate files for different functions  which makes it easy to test and swap storage backend.
-          -Each Module has a focused role: models for behavior and data. storage for persistence. task manager for business logic.Cli for UI. 
-          -The code follows a layered architecture: 
+          Clear Separate files for different functions  which makes it easy to test and swap storage backend.
+          Each Module has a focused role: models for behavior and data. storage for persistence. task manager for business logic.Cli for UI. 
+          The code follows a layered architecture: 
               CLI->TaskManager->Storage->JSON file
   Part 2: Deepen Understatnding Trhough Guided Questions 
-        -My initial Understatnding about the task priorities is that first task created has high priority which will be the first to be stored and retrived (using QUEUE data structure following FIFO method)
-        -I have discovered that 
+          My initial Understatnding about the task priorities is that first task created has high priority which will be the first to be stored and retrived (using QUEUE data structure following FIFO method)
+           I have discovered that 
         Priorities are ENUM represented in numbers: LOW =1, MEDIUM=2, HIGH=3, URGENT=4 and Medium is default.
 
-      -The system represents priority as a TaskPriority enum in memory.
-        -CLI and TaskManager accept priorities as integers
+       The system represents priority as a TaskPriority enum in memory.
+        CLI and TaskManager accept priorities as integers
         it represent the urgency/priority of a task, with a larger number
-        -they are used for  display,filtering and stastics
+        they are used for  display,filtering and stastics
       Key insight
-        -Tasks are persisted in JSON files
-        -Enum priorities are saved in numbers
-        -TaskPriority mapped to integers
-        -Different files are Linked through API
+        Tasks are persisted in JSON files
+        Enum priorities are saved in numbers
+        TaskPriority mapped to integers
+        Different files are Linked through API
       Misconceptions
-        -misconception - I thought the JSON file might contain python enum objects
-        -Clarified-Enums are stored as Integers 
+        misconception - I thought the JSON file might contain python enum objects
+        Clarified-Enums are stored as Integers 
 
-        -misconception - I assued priority implies any list or execution is ordered by priority.
+        misconception - I assued priority implies any list or execution is ordered by priority.
         Clarified-the code store by priority metadata  but doesnot sort or schedule tasks by priority.
 
-        -misconception - taskID are not simple integers.
+        misconception - taskID are not simple integers.
         Clarity- task.id is a UUID string generated by Task.init
 
     Part 3:Mapping workflow
