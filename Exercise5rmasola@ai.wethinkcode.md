@@ -49,12 +49,11 @@ tasks.json
  Project Structure
 text
 TaskManager/
-├── cli.py
-├── models.py
-├── task_manager.py
-├── storage.py
-└── tasks.json
-
+->cli.py
+->models.py
+->task_manager.py
+->storage.py
+->tasks.json
 
  Main Components
 
@@ -67,7 +66,7 @@ tasks.json — Stores task information persistently.
 
 Troubleshooting
 
- Python command is not recognised
+If Python command is not recognised
 
 Make sure Python 3 is installed and added to your system PATH.
 
@@ -81,7 +80,7 @@ For example:
 text
 2026-08-20
 
- Task data is not being saved
+Task data is not being saved
 
 Check that the application has permission to create or modify the 
 tasks.json file and that the storage path is correct.
@@ -101,8 +100,6 @@ This project is provided for educational purposes.
 
 
 # How to Create a Task in the Task Manager
-
-## Prerequisites
 
 Before creating a task:
 
