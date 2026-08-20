@@ -34,9 +34,6 @@ Completed tasks receive a large penalty.
 Tags such as urgent, critical, and blocker increase the score.
 After calculating the scores, tasks are sorted from highest to lowest.
 The get_top_priority_tasks() function returns only the first 5 tasks by default.
-What are the reflection questions asking?
-
-You don't need complicated answers.
 
 1. How did AI's explanation change my understanding?
 
